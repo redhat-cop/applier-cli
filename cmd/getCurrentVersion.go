@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"strings"
 
+	fileinterface "github.com/redhat-cop/applier-cli/pkg/file_interface"
 	"github.com/spf13/cobra"
 	yaml "gopkg.in/yaml.v2"
 )
@@ -17,13 +17,14 @@ var getCurrentVersionCmd = &cobra.Command{
 	Long:  `Reads the current version of the applier defined in requirements.yml`,
 
 	Run: func(cmd *cobra.Command, args []string) {
-		getCurrentVer()
+		var fileInterface *fileinterface.FileSystemInterface
+		getCurrentVer(fileInterface)
 	},
 }
 
-func getCurrentVer() {
+func getCurrentVer(fileInterface fileinterface.FileInterface) {
 
-	reqFile, err := ioutil.ReadFile("./requirements.yml")
+	reqFile, err := fileInterface.ReadFile("./requirements.yml")
 	if err != nil {
 		return
 	}
